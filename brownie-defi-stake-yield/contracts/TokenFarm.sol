@@ -30,7 +30,7 @@ contract TokenFarm is Ownable {
     function issueTokens() public onlyOwner {
         for (
             uint256 stakersIndex = 0;
-            stakersIndex <= stakers.length;
+            stakersIndex < stakers.length;
             stakersIndex++
         ) {
             address recipient = stakers[stakersIndex];
@@ -47,7 +47,7 @@ contract TokenFarm is Ownable {
         );
         for (
             uint256 allowedTokensIndex = 0;
-            allowedTokensIndex <= allowedTokens.length;
+            allowedTokensIndex < allowedTokens.length;
             allowedTokensIndex++
         ) {
             totalValue =
@@ -96,6 +96,7 @@ contract TokenFarm is Ownable {
         require(tokenIsAllowed(_token), "Token is not currently allowed");
         // transferFrom beacause contract does not own the ERC20 - import @openzepp ERC/IERC.. above
         IERC20(_token).transferFrom(msg.sender, address(this), _amount);
+        updateUniqueTokenStaked(msg.sender, _token);
         stakingBalance[_token][msg.sender] =
             stakingBalance[_token][msg.sender] +
             _amount;
